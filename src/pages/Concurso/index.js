@@ -1,14 +1,12 @@
 import React from 'react';
 import { View, SafeAreaView, Text, StyleSheet, Image, TouchableOpacity, Modal } from 'react-native';
-//import ModalPadrao from '../../components/ModalPadrao';   <ModalPadrao />
+import ModalFiltro from '../../components/ModalFiltro';
 
 export default function Concurso() {
   return (
     <SafeAreaView style={style.container}>
       <Text style={style.corText}>Selecione os filtros abaixo:</Text>
-
-
-
+      <ModalFiltro />
     </SafeAreaView>
   )
 }
