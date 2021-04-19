@@ -14,15 +14,6 @@ let selectedAssunto = [];
 
 let dataAssuntos = [];
 
-
-
-
-
-
-
-
-
-
 export default function Concurso() {
 
   const [disciplinas, setDisciplinas] = useState(dataDisciplina);
@@ -145,8 +136,8 @@ export default function Concurso() {
   };
 
   // SELECT CHEKBOX TRUE
-  const renderCategories = () => {
-    return selectedDisciplinas.map((item, index) => <Text style={{ color: '#FFF' }} key={index}>{item.txt}</Text>);
+  const renderMateria = () => {
+    return selectedDisciplinas.map((item, index) => <Text style={{ color: '#FFF', fontWeight: 'bold' }} key={index}>     Matéria: {item.txt}</Text>);
   }
   // ---------------------------------------FIM MATERIA ---------------------------------------------------------------------//
 
@@ -202,7 +193,7 @@ export default function Concurso() {
 
   const renderAssuntos = () => {
     if (selectedAssunto) {
-      return selectedAssunto.map((item, index) => <Text style={{ color: '#FFF' }} key={index}>{item.txt}</Text>)
+      return selectedAssunto.map((item, index) => <Text style={{ color: '#FFF', fontWeight: 'bold' }} key={index}>     Assunto: {item.txt}</Text>)
     }
   }
 
@@ -261,7 +252,7 @@ export default function Concurso() {
 
   const renderEscolaridade = () => {
     if (selectedEscolaridade) {
-      return selectedEscolaridade.map((item, index) => <Text style={{ color: '#FFF' }} key={index}>{item.escolaridade}</Text>)
+      return selectedEscolaridade.map((item, index) => <Text style={{ color: '#FFF', fontWeight: 'bold' }} key={index}>     Escolaridade: {item.escolaridade}</Text>)
     }
   }
 
@@ -320,7 +311,7 @@ export default function Concurso() {
 
   const renderAno = () => {
     if (selectedAno) {
-      return selectedAno.map((item, index) => <Text style={{ color: '#FFF' }} key={index}>{item.ano}</Text>)
+      return selectedAno.map((item, index) => <Text style={{ color: '#FFF', fontWeight: 'bold' }} key={index}>     Ano: {item.ano}</Text>)
     }
   }
 
@@ -379,7 +370,7 @@ export default function Concurso() {
 
   const renderBanca = () => {
     if (selectedBanca) {
-      return selectedBanca.map((item, index) => <Text style={{ color: '#FFF' }} key={index}>{item.banca}</Text>)
+      return selectedBanca.map((item, index) => <Text style={{ color: '#FFF', fontWeight: 'bold' }} key={index}>     Banca: {item.banca}</Text>)
     }
   }
 
@@ -436,7 +427,7 @@ export default function Concurso() {
 
   const renderArea = () => {
     if (selectedArea) {
-      return selectedArea.map((item, index) => <Text style={{ color: '#FFF' }} key={index}>{item.area}</Text>)
+      return selectedArea.map((item, index) => <Text style={{ color: '#FFF', fontWeight: 'bold' }} key={index}>     Área: {item.area}</Text>)
     }
   }
 
@@ -494,7 +485,7 @@ export default function Concurso() {
 
   const renderFormacao = () => {
     if (selectedFormacao) {
-      return selectedFormacao.map((item, index) => <Text style={{ color: '#FFF' }} key={index}>{item.formacao}</Text>)
+      return selectedFormacao.map((item, index) => <Text style={{ color: '#FFF', fontWeight: 'bold' }} key={index}>     Formação: {item.formacao}</Text>)
     }
   }
 
@@ -552,7 +543,7 @@ export default function Concurso() {
 
   const renderRegiao = () => {
     if (selectedRegiao) {
-      return selectedRegiao.map((item, index) => <Text style={{ color: '#FFF' }} key={index}>{item.regiao}</Text>)
+      return selectedRegiao.map((item, index) => <Text style={{ color: '#FFF', fontWeight: 'bold' }} key={index}>     Região: {item.regiao}</Text>)
     }
   }
 
@@ -610,7 +601,7 @@ export default function Concurso() {
 
   const renderOrgaoCargo = () => {
     if (selectedOrgaoCargo) {
-      return selectedOrgaoCargo.map((item, index) => <Text style={{ color: '#FFF' }} key={index}>{item.orgaoCargo}</Text>)
+      return selectedOrgaoCargo.map((item, index) => <Text style={{ color: '#FFF', fontWeight: 'bold' }} key={index}>     Orgão e Cargo: {item.orgaoCargo}</Text>)
     }
   }
 
@@ -668,7 +659,7 @@ export default function Concurso() {
 
   const renderModalidade = () => {
     if (selectedModalidade) {
-      return selectedModalidade.map((item, index) => <Text style={{ color: '#FFF' }} key={index}>{item.modalidade}</Text>)
+      return selectedModalidade.map((item, index) => <Text style={{ color: '#FFF', fontWeight: 'bold' }} key={index}>     Modalidades: {item.modalidade}</Text>)
     }
   }
 
@@ -742,61 +733,117 @@ export default function Concurso() {
 
   return (
     <SafeAreaView style={styles.container} >
+      <View style={{ flexDirection: 'column' }}>
+        <View style={{ width: '100%', height: '70%', backgroundColor: 'red', alignItems: 'center' }}>
+          <Text style={styles.corTextFiltro}>Escolher Filtros</Text>
 
-      <Text style={styles.corText}>Escolher Filtros</Text>
+          <TouchableOpacity style={styles.optionMenu} onPress={() => setModalVisibleMateria(true)} >
+            <Text style={styles.textMenu}>MATÉRIA</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.optionMenu} onPress={() => setModalVisibleAssunto(true)} >
+            <Text style={styles.textMenu}>ASSUNTO</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.optionMenu} onPress={() => setModalVisibleEscolaridade(true)} >
+            <Text style={styles.textMenu}>ESCOLARIDADE</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.optionMenu} onPress={() => setModalVisibleAno(true)} >
+            <Text style={styles.textMenu}>ANO</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.optionMenu} onPress={() => setModalVisibleBanca(true)} >
+            <Text style={styles.textMenu}>BANCA</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.optionMenu} onPress={() => setModalVisibleArea(true)} >
+            <Text style={styles.textMenu}>ÁREA</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.optionMenu} onPress={() => setModalVisibleFormacao(true)} >
+            <Text style={styles.textMenu}>FORMAÇÃO</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.optionMenu} onPress={() => setModalVisibleRegiao(true)} >
+            <Text style={styles.textMenu}>REGIÃO</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.optionMenu} onPress={() => setModalVisibleOrgaoCargo(true)} >
+            <Text style={styles.textMenu}>ÓRGÃO E CARGO</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.optionMenu} onPress={() => setModalVisibleModalidade(true)} >
+            <Text style={styles.textMenu}>MODALIDADES</Text>
+          </TouchableOpacity>
+
+        </View>
+
+        <View style={{ width: '100%', height: '30%', backgroundColor: 'blue' }}>
 
 
-      <TouchableOpacity style={styles.optionMenu} onPress={() => setModalVisibleMateria(true)} >
-        <Text style={styles.textMenu}>MATÉRIA</Text>
-      </TouchableOpacity>
 
-      <TouchableOpacity style={styles.optionMenu} onPress={() => setModalVisibleAssunto(true)} >
-        <Text style={styles.textMenu}>ASSUNTO</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity style={styles.optionMenu} onPress={() => setModalVisibleEscolaridade(true)} >
-        <Text style={styles.textMenu}>ESCOLARIDADE</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity style={styles.optionMenu} onPress={() => setModalVisibleAno(true)} >
-        <Text style={styles.textMenu}>ANO</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity style={styles.optionMenu} onPress={() => setModalVisibleBanca(true)} >
-        <Text style={styles.textMenu}>BANCA</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity style={styles.optionMenu} onPress={() => setModalVisibleArea(true)} >
-        <Text style={styles.textMenu}>ÁREA</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity style={styles.optionMenu} onPress={() => setModalVisibleFormacao(true)} >
-        <Text style={styles.textMenu}>FORMAÇÃO</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity style={styles.optionMenu} onPress={() => setModalVisibleRegiao(true)} >
-        <Text style={styles.textMenu}>REGIÃO</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity style={styles.optionMenu} onPress={() => setModalVisibleOrgaoCargo(true)} >
-        <Text style={styles.textMenu}>ÓRGÃO E CARGO</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity style={styles.optionMenu} onPress={() => setModalVisibleModalidade(true)} >
-        <Text style={styles.textMenu}>MODALIDADES</Text>
-      </TouchableOpacity>
+          <View style={{ width: '100%', height: '63%', backgroundColor: 'orange', marginBottom: 2, marginTop: 2 }}>
 
 
-      {renderCategories()}
-      {renderAssuntos()}
-      {renderEscolaridade()}
-      {renderAno()}
-      {renderBanca()}
-      {renderArea()}
-      {renderFormacao()}
-      {renderRegiao()}
-      {renderOrgaoCargo()}
-      {renderModalidade()}
+            <ScrollView style={{ borderWidth: 2, margin: 2, }}>
+
+              {renderMateria()}
+              {renderAssuntos()}
+              {renderEscolaridade()}
+              {renderAno()}
+              {renderBanca()}
+              {renderArea()}
+              {renderFormacao()}
+              {renderRegiao()}
+              {renderOrgaoCargo()}
+              {renderModalidade()}
+
+            </ScrollView>
+
+          </View>
+
+          <View style={{ width: '100%', height: '12%', flexDirection: 'row', justifyContent: 'space-around', marginBottom: 1, backgroundColor: 'green' }}>
+            <TouchableOpacity style={{ width: '45%', height: '90%', backgroundColor: '#FFF', borderRadius: 8, alignItems: 'center', justifyContent: 'center' }} onPress={() => setModalVisibleModalidade(true)} >
+              <Text style={{ color: 'black', fontSize: 20, fontWeight: 'bold', }}>Filtros</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity style={{ width: '45%', height: '90%', backgroundColor: '#FFF', borderRadius: 8, alignItems: 'center', justifyContent: 'center' }} onPress={() => setModalVisibleModalidade(true)} >
+              <Text style={{ color: 'black', fontSize: 20, fontWeight: 'bold', }}>Salvar filtros</Text>
+            </TouchableOpacity>
+          </View>
+
+          <View style={{ width: '100%', height: '20%', flexDirection: 'row', justifyContent: 'center' }}>
+            <TouchableOpacity style={{ width: '95%', height: '100%', backgroundColor: '#FFF', borderRadius: 8, alignItems: 'center', justifyContent: 'center' }} onPress={() => setModalVisibleModalidade(true)} >
+              <Text style={{ color: 'black', fontSize: 20, fontWeight: 'bold', }}>RESOLVER QUESTÕES</Text>
+            </TouchableOpacity>
+
+          </View>
+
+        </View>
+
+        {
+          /*
+          backgroundColor: '#FFF',
+            alignItems: 'center',
+            justifyContent: 'center',
+            width: '90%',
+            borderRadius: 8,
+            height: '7%',
+            //height: 30,
+            //bottom: 450,
+            marginTop: 10
+            //marginTop: 20,
+        
+        
+          */
+        }
+
+      </View>
+
+
+
+
 
       <View style={styles.centeredView}>
 
@@ -1075,6 +1122,9 @@ export default function Concurso() {
 
 
 
+
+
+
     </SafeAreaView>
   );
 };
@@ -1092,17 +1142,21 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     //justifyContent: 'center',
-    paddingTop: Constants.statusBarHeight,
+    //paddingTop: Constants.statusBarHeight,
     backgroundColor: '#21242F',
-    padding: 8,
-    alignItems: 'center'
+    //padding: 8,
+    //alignItems: 'center',
+
+
 
   },
-  corText: {
+  corTextFiltro: {
     color: '#FFF',
     fontSize: 20,
     fontWeight: 'bold',
-    marginBottom: 10
+    height: '6%'
+    //marginBottom: 0,
+    //bottom: 25
 
   },
 
@@ -1112,7 +1166,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     width: '90%',
     borderRadius: 8,
-    height: 38,
+    height: '7%',
+    //height: 30,
     //bottom: 450,
     marginTop: 10
     //marginTop: 20,
