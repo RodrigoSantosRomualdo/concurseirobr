@@ -68,7 +68,7 @@ const styles = StyleSheet.create({
     //backgroundColor: '#FFF'
   },
   optionMenu: {
-    backgroundColor: '#FFF',
+    backgroundColor: '#e6e4c1',
     alignItems: 'center',
     justifyContent: 'center',
     width: '90%',
@@ -82,8 +82,6 @@ const styles = StyleSheet.create({
     color: 'black',
     fontSize: 20,
     fontWeight: 'bold',
-
-
   },
   viewMenu: {
     marginTop: 90,

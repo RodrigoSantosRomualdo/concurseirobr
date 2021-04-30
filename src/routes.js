@@ -23,6 +23,7 @@ import Home from './pages/Home';
 import Concurso from './pages/Concurso';
 import Emprego from './pages/Emprego';
 import StatusConcursos from './pages/StatusConcursos';
+import ResolverQuestoes from './pages/ResolverQuestoes'
 
 const Drawer = createDrawerNavigator();
 
@@ -60,7 +61,18 @@ function Routes() {
           title: 'Vagas de Emprego'
         }}
       />
+
+      <Drawer.Screen
+        name='ResolverQuestoes'
+        component={ResolverQuestoes}
+        options={{
+          title: 'Resolver Questões'
+        }}
+      />
+
+
     </Drawer.Navigator>
+
   )
 }
 

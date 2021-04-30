@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
-import { View, SafeAreaView, Text, StyleSheet, Image, TouchableOpacity, Modal, CheckBox, Pressable, FlatList, Button, ScrollView } from 'react-native';
+import { View, SafeAreaView, Text, StyleSheet, Image, TouchableOpacity, Modal, CheckBox, Pressable, FlatList, Button, ScrollView, TextInput, Alert } from 'react-native';
+import banco from '../../database/models/db-initFiltro'
+import { useNavigation } from '@react-navigation/native';
 import Constants from 'expo-constants';
 import ModalFiltro from '../../components/ModalFiltro';
 //<ModalFiltro />
@@ -15,6 +17,7 @@ let selectedAssunto = [];
 let dataAssuntos = [];
 
 export default function Concurso() {
+  const navigation = useNavigation();
 
   const [disciplinas, setDisciplinas] = useState(dataDisciplina);
   const [assuntos, setAssuntos] = useState('')
@@ -26,6 +29,8 @@ export default function Concurso() {
   const [regioes, setRegioes] = useState(dataFiltroRegiao);
   const [orgaoCargos, setOrgaoCargo] = useState(dataFiltroOrgaoCargo);
   const [modalidades, setModalidades] = useState(dataFiltroModalidades);
+
+  const [filtrosSalvos, setFiltrosSalvos] = useState(dataDisciplina);
 
   // --------------------------------------- INICIO MATERIA ---------------------------------------------------------------------//
   const handleChangeMateria = (id) => {
@@ -118,15 +123,17 @@ export default function Concurso() {
                   flexDirection: 'row',
                   flex: 1,
                   justifyContent: 'flex-start',
+
                   //alignItems: 'center'
                 }}>
                 <CheckBox
+                  style={{}}
                   value={item.isChecked}
                   onChange={() => {
                     handleChangeMateria(item.id);
                   }}
                 />
-                <Text>{item.txt}</Text>
+                <Text style={{}}>{item.txt}</Text>
               </View>
             </View>
           </Card>
@@ -690,6 +697,111 @@ export default function Concurso() {
   const [modalVisibleOrgaoCargo, setModalVisibleOrgaoCargo] = useState(false);
   const [modalVisibleModalidade, setModalVisibleModalidade] = useState(false);
 
+  const [modalVisibleSalvarFiltro, setModalVisibleSalvarFiltro] = useState(false)
+  const [modalVisibleFiltroSalvo, setModalVisibleFiltroSalvo] = useState(false)
+
+  const [myInput, setmyInput] = useState('');
+  const [placeholderSalvarFiltro, setPlaceholderSalvarFiltro] = useState('Informe o nome do seu filtro')
+
+
+
+
+  const handleCancelarFiltro = () => {
+    console.log('CANCELADO')
+    setModalVisibleSalvarFiltro(false);
+    setmyInput('')
+  };
+
+  const handleCancelarFiltroSalvos = () => {
+    console.log('handleCancelarFiltroSAlvos')
+    setModalVisibleFiltroSalvo(false);
+  }
+
+  const handleSalvarFiltro = () => {
+    let variavelDisciplinaBanco = ''
+    let variavelAssuntoBanco = ''
+    let variavelEscolaridadeBanco = ''
+    let variavelAnoBanco = ''
+    let variavelBancaBanco = ''
+    let variavelAreaBanco = ''
+    let variavelFormacaoBanco = ''
+    let variavelRegiaoBanco = ''
+    let variavelOrgaoCargoBanco = ''
+    let variavelModalidadeBanco = ''
+    console.log('MEU INPUT: ', myInput)
+    if (myInput === '') {
+      console.log('INPUT VAZIO')
+      Alert.alert('Informe um nome para o filtro')
+    } else if (myInput !== '') {
+
+
+      { selectedDisciplinas && selectedDisciplinas.map(selectedDisciplina => variavelDisciplinaBanco += `${selectedDisciplina.txt} - `) }
+      { selectedAssunto && selectedAssunto.map(item => variavelAssuntoBanco += `${item.txt} - `) }
+      { selectedEscolaridade && selectedEscolaridade.map(item => variavelEscolaridadeBanco += `${item.txt} - `) }
+      { selectedAno && selectedAno.map(item => variavelAnoBanco += `${item.txt} - `) }
+      { selectedBanca && selectedBanca.map(item => variavelBancaBanco += `${item.txt} - `) }
+      { selectedArea && selectedArea.map(item => variavelAreaBanco += `${item.txt} - `) }
+      { selectedFormacao && selectedFormacao.map(item => variavelFormacaoBanco += `${item.txt} - `) }
+      { selectedRegiao && selectedRegiao.map(item => variavelRegiaoBanco += `${item.txt} - `) }
+      { selectedOrgaoCargo && selectedOrgaoCargo.map(item => variavelOrgaoCargoBanco += `${item.txt} - `) }
+      { selectedModalidade && selectedModalidade.map(item => variavelModalidadeBanco += `${item.txt} - `) }
+
+      console.log('SALVANDO FILTRO')
+      setModalVisibleSalvarFiltro(false);
+      setmyInput('')
+      'selectedDisciplinas TEXT, selectedAssunto TEXT, selectedEscolaridade TEXT, selectedAno TEXT, selectedBanca TEXT, selectedArea TEXT, selectedFormacao TEXT, selectedRegiao TEXT, selectedOrgaoCargo TEXT, selectedModalidade TEXT'
+      let obj = {
+        nomeFiltro: myInput,
+        selectedDisciplinas: `${variavelDisciplinaBanco}`,
+        selectedAssunto: `${variavelAssuntoBanco}`,
+        selectedEscolaridade: `${variavelEscolaridadeBanco}`,
+        selectedAno: `${variavelAnoBanco}`,
+        selectedBanca: `${variavelBancaBanco}`,
+        selectedArea: `${variavelAreaBanco}`,
+        selectedFormacao: `${variavelFormacaoBanco}`,
+        selectedRegiao: `${variavelRegiaoBanco}`,
+        selectedOrgaoCargo: `${variavelOrgaoCargoBanco}`,
+        selectedModalidade: `${variavelModalidadeBanco}`,
+      }
+
+      banco.create(obj)
+
+
+
+      disciplinas.map((checked) => { checked.isChecked === true && (checked.isChecked = false) });
+      assuntos.map((checked) => { checked.isChecked === true && (checked.isChecked = false) });
+      escolaridades.map((checked) => { checked.isChecked === true && (checked.isChecked = false) });
+      anos.map((checked) => { checked.isChecked === true && (checked.isChecked = false) });
+      areas.map((checked) => { checked.isChecked === true && (checked.isChecked = false) });
+      formacoes.map((checked) => { checked.isChecked === true && (checked.isChecked = false) });
+      regioes.map((checked) => { checked.isChecked === true && (checked.isChecked = false) });
+      orgaoCargos.map((checked) => { checked.isChecked === true && (checked.isChecked = false) });
+      modalidades.map((checked) => { checked.isChecked === true && (checked.isChecked = false) });
+
+
+      /*
+                if (disciplina.isChecked === true) {
+                  console.log('ANTES', disciplina)
+                  disciplina.isChecked = false;
+                  console.log('DEPOIS', disciplina)
+                  //setDisciplinas
+                }   */
+      //if (isChecked === disciplina.isChecked) {
+      //        console.log(disciplina)
+      // }
+      //return disciplina;
+
+
+
+    }
+
+  };
+
+
+
+
+
+
 
   const [isSelected, setSelected] = useState(false);
 
@@ -699,14 +811,7 @@ export default function Concurso() {
   }
 
 
-  function testeNovo(selectedDisciplinas) {
-    if (selectedDisciplinas) {
-      console.log('CHAMOU A FUNCAO TESTE TESTE TESTE ALDO DENTRO DO SELECT')
-    } else {
-      console.log('CHAMOU A FUNCAO TESTE TESTE TESTE ALDO SELECT VAZIO')
-      //setTest('TESTEADICONADO')
-    }
-  }
+
 
   async function dataDeAssuntos(modalVisibleMateria, selectedDisciplinas) {
     if (!modalVisibleMateria && selectedDisciplinas) {
@@ -731,10 +836,50 @@ export default function Concurso() {
   dataDeAssuntos(modalVisibleMateria, selectedDisciplinas)
   // <Text>{renderFlatListMateria(dataDisciplina)}</Text>
 
+  const modalFiltros = () => {
+    setModalVisibleFiltroSalvo(true)
+
+    const bbb = []
+    const printCar = (banco) => {
+      //console.log('USE  INICIOU')
+      const id = banco.id.toString();
+      bbb.push({ id, nomeFiltro: banco.nomefiltro })
+      //console.log(id)
+      setFiltrosSalvos(bbb)
+      //console.log('MEU BANCO  ->  ', banco)
+    }
+
+    banco.all()
+      .then(
+        bancos => bancos.forEach(b => printCar(b))
+      )
+
+    console.log('MEU FILTRO ', filtrosSalvos)
+  }
+
+  const handleFiltroSelecionado = (filtroSelecionado) => {
+    console.log('PROPS OPCAO FILTRO, ', filtroSelecionado)
+    console.log('FECHANDO MODAL')
+
+    setModalVisibleFiltroSalvo(false);
+    navigation.navigate('ResolverQuestoes')
+  }
+
+  const handleResolverQuestoes = (filtroSelecionado) => {
+    console.log('FUNCAO PAGINA RESOLVER QUESTOES', filtroSelecionado)
+    //console.log('FUNCAO PAGINA RESOLVER QUESTOES', filtroSelecionado[0].props.children)
+    //console.log('FUNCAO PAGINA RESOLVER QUESTOES', filtroSelecionado[1].props.children)
+    //console.log('SELECIONADOS: ?? ', selectedDisciplinas)
+    //const teste = 'MEU TESTE FOI'
+    navigation.navigate('ResolverQuestoes', { selectedDisciplinas })
+  }
+
+
+
   return (
     <SafeAreaView style={styles.container} >
       <View style={{ flexDirection: 'column' }}>
-        <View style={{ width: '100%', height: '70%', backgroundColor: 'red', alignItems: 'center' }}>
+        <View style={{ width: '100%', height: '70%', alignItems: 'center' }}>
           <Text style={styles.corTextFiltro}>Escolher Filtros</Text>
 
           <TouchableOpacity style={styles.optionMenu} onPress={() => setModalVisibleMateria(true)} >
@@ -779,14 +924,11 @@ export default function Concurso() {
 
         </View>
 
-        <View style={{ width: '100%', height: '30%', backgroundColor: 'blue' }}>
+        <View style={{ width: '100%', height: '30%', }}>
 
+          <View style={{ width: '100%', height: '75%', marginBottom: 2, marginTop: 2, flexDirection: 'row', justifyContent: 'space-between' }}>
 
-
-          <View style={{ width: '100%', height: '63%', backgroundColor: 'orange', marginBottom: 2, marginTop: 2 }}>
-
-
-            <ScrollView style={{ borderWidth: 2, margin: 2, }}>
+            <ScrollView style={{ borderWidth: 1, borderColor: '#383e55', marginRight: '1%', marginLeft: '5%' }}>
 
               {renderMateria()}
               {renderAssuntos()}
@@ -801,20 +943,23 @@ export default function Concurso() {
 
             </ScrollView>
 
+
+            <View style={{ flexDirection: 'column', justifyContent: 'space-around' }}>
+              <TouchableOpacity style={{ width: '100%', height: '30%', backgroundColor: '#e6e4c1', borderRadius: 8, justifyContent: 'center' }} onPress={() => modalFiltros()} >
+                <Text style={{ color: 'black', fontSize: 15, fontWeight: 'bold', }}>Filtros salvos</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity style={{ width: '100%', height: '30%', backgroundColor: '#e6e4c1', borderRadius: 8, alignItems: 'center', justifyContent: 'center' }} onPress={() => setModalVisibleSalvarFiltro(true)} >
+                <Text style={{ color: 'black', fontSize: 15, fontWeight: 'bold', }}>Salvar filtros</Text>
+              </TouchableOpacity>
+            </View>
+
           </View>
 
-          <View style={{ width: '100%', height: '12%', flexDirection: 'row', justifyContent: 'space-around', marginBottom: 1, backgroundColor: 'green' }}>
-            <TouchableOpacity style={{ width: '45%', height: '90%', backgroundColor: '#FFF', borderRadius: 8, alignItems: 'center', justifyContent: 'center' }} onPress={() => setModalVisibleModalidade(true)} >
-              <Text style={{ color: 'black', fontSize: 20, fontWeight: 'bold', }}>Filtros</Text>
-            </TouchableOpacity>
 
-            <TouchableOpacity style={{ width: '45%', height: '90%', backgroundColor: '#FFF', borderRadius: 8, alignItems: 'center', justifyContent: 'center' }} onPress={() => setModalVisibleModalidade(true)} >
-              <Text style={{ color: 'black', fontSize: 20, fontWeight: 'bold', }}>Salvar filtros</Text>
-            </TouchableOpacity>
-          </View>
 
           <View style={{ width: '100%', height: '20%', flexDirection: 'row', justifyContent: 'center' }}>
-            <TouchableOpacity style={{ width: '95%', height: '100%', backgroundColor: '#FFF', borderRadius: 8, alignItems: 'center', justifyContent: 'center' }} onPress={() => setModalVisibleModalidade(true)} >
+            <TouchableOpacity style={{ width: '95%', height: '100%', backgroundColor: '#e6e4c1', borderRadius: 8, alignItems: 'center', justifyContent: 'center' }} onPress={() => handleResolverQuestoes()} >
               <Text style={{ color: 'black', fontSize: 20, fontWeight: 'bold', }}>RESOLVER QUESTÕES</Text>
             </TouchableOpacity>
 
@@ -841,7 +986,107 @@ export default function Concurso() {
 
       </View>
 
+      <View style={styles.centeredView}>
 
+        <Modal animationType="slide" transparent={true} visible={modalVisibleSalvarFiltro} onRequestClose={() => {
+          Alert.alert("Modal has been closed.");
+          setModalVisibleSalvarFiltro(!modalVisibleSalvarFiltro);
+        }} >
+          <View style={{ marginTop: '60%' }}>
+            <View style={styles.modalView}>
+              <TextInput style={{ marginBottom: '15%', color: '#FFF', fontSize: 20 }}
+                onChangeText={setmyInput}
+                value={myInput}
+                placeholder={placeholderSalvarFiltro}
+              />
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: '95%' }}>
+                <Pressable
+                  style={{
+                    width: '45%', backgroundColor: "#2196F3", alignItems: 'center', justifyContent: 'center', borderRadius: 8, height: 40, bottom: 10,
+                  }}
+                  onPress={handleCancelarFiltro}
+                >
+                  <Text style={styles.textStyle}>Cancelar</Text>
+                </Pressable>
+
+                <Pressable
+                  style={{
+                    width: '45%', backgroundColor: "#2196F3", alignItems: 'center',
+                    justifyContent: 'center',
+
+                    borderRadius: 8,
+                    height: 40,
+                    bottom: 10,
+                  }}
+                  onPress={handleSalvarFiltro}
+                >
+                  <Text style={styles.textStyle}>Salvar Filtro</Text>
+                </Pressable>
+
+              </View>
+            </View>
+          </View>
+        </Modal>
+      </View>
+
+      <View style={styles.centeredView}>
+        <Modal animationType="slide" transparent={true} visible={modalVisibleFiltroSalvo} onRequestClose={() => {
+          Alert.alert("Modal has been closed.");
+          setModalVisibleFiltroSalvo(!modalVisibleFiltroSalvo);
+        }} >
+          <View style={styles.centeredView}>
+            <View style={styles.modalView}>
+
+              <Text style={{ fontSize: 13, width: '90%', color: '#FFF', justifyContent: 'center', alignItems: 'center' }}>Selecione o filtro para resolver as questões</Text>
+              <View style={{ width: '100%', height: '80%', justifyContent: 'center', alignItems: 'center' }}>
+                <ScrollView horizontal={false}>
+                  <ScrollView horizontal={true} >
+                    <View style={{}}>
+                      <FlatList
+                        style={{
+                          padding: 10,
+                          margin: 5, /*width: '100%', marginTop: 10, backgroundColor: '#FFF', borderRadius: 8, width: '90%',*/
+                        }}
+                        data={filtrosSalvos}
+                        keyExtractor={item => item.id}
+                        renderItem={({ item }) => {
+                          return (
+
+                            <TouchableOpacity style={{
+                              alignItems: "center", backgroundColor: '#FFF',
+                              //flexGrow: 1,
+                              marginTop: 10,
+                              padding: 10, borderRadius: 8, width: 200, justifyContent: 'center',/*marginTop: 10, height: '15%', backgroundColor: '#FFF', borderRadius: 8, width: '90%', alignItems: 'center', justifyContent: 'center', */
+                            }} onPress={() => handleFiltroSelecionado(item.nomeFiltro)} >
+                              <Text style={styles.textMenu} > {item.nomeFiltro}  </Text>
+
+                            </TouchableOpacity>
+                          );
+                        }}
+                      />
+
+                    </View>
+                  </ScrollView>
+
+                </ScrollView>
+              </View>
+
+              <View style={{ flexDirection: 'row', justifyContent: 'center', width: '95%' }}>
+                <Pressable
+                  style={{
+                    width: '45%', backgroundColor: "#2196F3", alignItems: 'center',
+                    justifyContent: 'center', borderRadius: 8, height: 40, top: '8%'
+                  }}
+                  onPress={handleCancelarFiltroSalvos}
+                >
+                  <Text style={styles.textStyle}>Cancelar</Text>
+                </Pressable>
+
+              </View>
+            </View>
+          </View>
+        </Modal>
+      </View>
 
 
 
@@ -857,7 +1102,7 @@ export default function Concurso() {
               <ScrollView horizontal={false}>
                 <ScrollView horizontal={true} >
                   <View style={{}}>
-                    <Text style={styles.modalText}>{renderFlatListMateria(disciplinas)}</Text>
+                    <Text style={{}}>{renderFlatListMateria(disciplinas)}</Text>
 
                   </View>
                 </ScrollView>
@@ -886,14 +1131,12 @@ export default function Concurso() {
         }} >
           <View style={styles.centeredView}>
             <View style={styles.modalView}>
-              <Text style={styles.modalText}>Hello World!</Text>
               <Text style={styles.modalText}>{renderFlatListAssunto(assuntos)}</Text>
-              <Text style={styles.modalText}>Hello World!</Text>
               <Pressable
                 style={[styles.button, styles.buttonClose,]}
                 onPress={() => setModalVisibleAssunto(!modalVisibleAssunto)}
               >
-                <Text style={styles.textStyle}>Hide Modal</Text>
+                <Text style={styles.textStyle}>APLICAR FILTRO</Text>
               </Pressable>
             </View>
           </View>
@@ -1120,57 +1363,30 @@ export default function Concurso() {
         </Modal>
       </View>
 
-
-
-
-
-
     </SafeAreaView>
   );
 };
 
-/*
-
-
-      <View>
-        {renderCategories()}
-      </View>
-*/
-
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    //justifyContent: 'center',
-    //paddingTop: Constants.statusBarHeight,
     backgroundColor: '#21242F',
-    //padding: 8,
-    //alignItems: 'center',
-
-
-
   },
   corTextFiltro: {
     color: '#FFF',
     fontSize: 20,
     fontWeight: 'bold',
     height: '6%'
-    //marginBottom: 0,
-    //bottom: 25
-
   },
 
   optionMenu: {
-    backgroundColor: '#FFF',
+    backgroundColor: '#e6e4c1',
     alignItems: 'center',
     justifyContent: 'center',
     width: '90%',
     borderRadius: 8,
     height: '7%',
-    //height: 30,
-    //bottom: 450,
     marginTop: 10
-    //marginTop: 20,
   },
 
   textMenu: {
@@ -1181,8 +1397,6 @@ const styles = StyleSheet.create({
 
   centeredView: {
     flex: 1,
-    //justifyContent: "center",
-    //alignItems: "center",
     marginTop: 22
   },
 
@@ -1192,13 +1406,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-
+    backgroundColor: '#e6e4c1'
   },
 
   button: {
-    //borderRadius: 20,
-    //padding: 10,
-    //elevation: 2,
     width: '95%'
   },
 
@@ -1210,13 +1421,10 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     height: 40,
     bottom: 15,
-    //marginTop: 10
-
   },
 
   modalView: {
     margin: 10,
-    //backgroundColor: 'white',
     backgroundColor: '#383e52',
     borderRadius: 20,
     padding: 30,
@@ -1226,149 +1434,9 @@ const styles = StyleSheet.create({
   },
 
   textStyle: {
-    //color: '#FFF'
     fontWeight: 'bold',
   }
 });
-
-
-
-/*
-container: {
-  flex: 1,
-  justifyContent: 'center',
-  paddingTop: Constants.statusBarHeight,
-  backgroundColor: '#ecf0f1',
-  padding: 8,
-},
-containerSafe: {
-  flex: 1,
-  backgroundColor: '#21242F',
-  justifyContent: 'center',
-  alignItems: 'center',
-  marginTop: 0,
-  paddingTop: Constants.statusBarHeight,
-},
-corText: {
-  color: '#FFF',
-  fontSize: 20,
-  fontWeight: 'bold'
-},
-centeredView: {
-  flex: 1,
-  //justifyContent: "center",
-  //alignItems: "center",
-  marginTop: 22
-},
-modalView: {
-  margin: 20,
-  backgroundColor: "white",
-  borderRadius: 20,
-  padding: 35,
-  alignItems: "center",
-  shadowColor: "#000",
-  //shadowOffset: {  width: 0, height: 2 },
-  shadowOpacity: 0.25,
-  shadowRadius: 4,
-  elevation: 5
-},
-button: {
-  //borderRadius: 20,
-  //padding: 10,
-  //elevation: 2,
-  width: '95%'
-},
-buttonOpen: {
-  backgroundColor: "#F194FF",
-},
-buttonClose: {
-  backgroundColor: "#2196F3",
-  alignItems: 'center',
-  justifyContent: 'center',
-  width: '90%',
-  borderRadius: 8,
-  height: 40,
-  bottom: 20,
-  //marginTop: 10
-
-},
-optionMenu: {
-  backgroundColor: '#FFF',
-  alignItems: 'center',
-  justifyContent: 'center',
-  width: '90%',
-  borderRadius: 8,
-  height: 40,
-  bottom: 450,
-  marginTop: 10
-  //marginTop: 20,
-},
-textMenu: {
-  color: 'black',
-  fontSize: 15,
-  fontWeight: 'bold',
-},
-card: {
-  padding: 10,
-  margin: 5,
-  flexDirection: 'row',
-  justifyContent: 'space-between',
-  alignItems: 'center'
-},
-
-card2: {
-  padding: 0,
-  margin: 0,
-  flexDirection: 'row',
-  justifyContent: 'space-between',
-},
-modalView: {
-  margin: 20,
-  //backgroundColor: 'white',
-  backgroundColor: '#383e52',
-  borderRadius: 20,
-  padding: 5,
-  justifyContent: 'space-between',
-  alignItems: 'center',
-  elevation: 5,
-},
-text: {
-  textAlign: 'center',
-  fontWeight: 'bold',
-},
-
-
-});
-
-*/
-
-/*
-   <View style={styles.container}>
-     <View style={{ flex: 1 }}>{renderFlatList(disciplinas)}</View>
-     <Text style={styles.text}>Selected </Text>
-     <View style={{ flex: 1 }}>{renderFlatList(selectedDisciplinas)}</View>
-
-     <Text style={styles.text}>Selected--------------- </Text>
-     <Button
-       title='Clique'
-       color='Black'
-       onPress={() => { filtroAno(selectedDisciplinas) }}
-
-     />
-
-   </View>  */
-
-
-/*
-<Pressable
-       style={[styles.button, styles.buttonOpen]}
-       onPress={() => setModalVisible(true)}
-     >
-       <Text style={styles.textStyle}>Show Modal</Text>
-     </Pressable>
-*/
-
-
 
 
 const dataDisciplina = [
